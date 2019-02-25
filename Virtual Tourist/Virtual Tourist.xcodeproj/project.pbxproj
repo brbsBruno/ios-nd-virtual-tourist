@@ -56,15 +56,47 @@
 		7FB2B0C72224B3D700502C16 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				7FB2B0DF2224B4E900502C16 /* Assets */,
+				7FB2B0DE2224B49F00502C16 /* Controllers */,
+				7FB2B0E02224B50400502C16 /* Model */,
+				7FB2B0DD2224B49100502C16 /* Supporting Files */,
 				7FB2B0C82224B3D700502C16 /* AppDelegate.swift */,
-				7FB2B0CA2224B3D700502C16 /* ViewController.swift */,
-				7FB2B0CC2224B3D700502C16 /* Main.storyboard */,
-				7FB2B0D22224B3D900502C16 /* Assets.xcassets */,
-				7FB2B0D42224B3D900502C16 /* LaunchScreen.storyboard */,
-				7FB2B0D72224B3D900502C16 /* Info.plist */,
-				7FB2B0CF2224B3D700502C16 /* Virtual_Tourist.xcdatamodeld */,
 			);
 			path = "Virtual Tourist";
+			sourceTree = "<group>";
+		};
+		7FB2B0DD2224B49100502C16 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				7FB2B0D72224B3D900502C16 /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7FB2B0DE2224B49F00502C16 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				7FB2B0CA2224B3D700502C16 /* ViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		7FB2B0DF2224B4E900502C16 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				7FB2B0D22224B3D900502C16 /* Assets.xcassets */,
+				7FB2B0CC2224B3D700502C16 /* Main.storyboard */,
+				7FB2B0D42224B3D900502C16 /* LaunchScreen.storyboard */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
+		7FB2B0E02224B50400502C16 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7FB2B0CF2224B3D700502C16 /* Virtual_Tourist.xcdatamodeld */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,7 +319,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Virtual Tourist/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -304,7 +336,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = "Virtual Tourist/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Virtual Tourist/Supporting Files/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
