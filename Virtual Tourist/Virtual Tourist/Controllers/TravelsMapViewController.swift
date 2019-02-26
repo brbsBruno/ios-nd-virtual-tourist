@@ -22,14 +22,33 @@ class TravelsMapViewController: UIViewController {
         
         mapView.delegate = self
         
+        setupLongPressAction()
         setupLastViewedMapRegion()
     }
     
     // MARK: Setup
     
+    func setupLongPressAction() {
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(dropPin(_:)))
+        mapView.addGestureRecognizer(longPress)
+    }
+    
     func setupLastViewedMapRegion() {
         if let lastViewedMapRegion = UserPreferences.lastViewedMapRegion {
             mapView.setRegion(lastViewedMapRegion, animated: true)
+        }
+    }
+    
+    // MARK: Actions
+    
+    @objc func dropPin(_ sender: UIGestureRecognizer) {
+        if sender.state == .began {
+            let point = sender.location(in: mapView)
+            let coordinate = mapView.convert(point, toCoordinateFrom: mapView)
+            
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinate
+            mapView.addAnnotation(annotation)
         }
     }
     
