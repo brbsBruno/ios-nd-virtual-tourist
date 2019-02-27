@@ -9,6 +9,8 @@
 import UIKit
 import MapKit
 
+let showPhotosAlbumSegue = "showPhotosAlbum"
+
 class TravelsMapViewController: UIViewController {
     
     // MARK: Properties
@@ -24,6 +26,16 @@ class TravelsMapViewController: UIViewController {
         
         setupLongPressAction()
         setupLastViewedMapRegion()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == showPhotosAlbumSegue {
+            if let controller = segue.destination as? PhotosAlbumViewController,
+                let annotation = sender as? MKAnnotationView {
+                controller.mapRegion = mapView.region
+                controller.mapAnnotationView = annotation
+            }
+        }
     }
     
     // MARK: Setup
@@ -63,6 +75,10 @@ extension TravelsMapViewController: MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         updateLastViewedMapRegion(mapView.region)
+    }
+    
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        performSegue(withIdentifier: showPhotosAlbumSegue, sender: view)
     }
 }
 
