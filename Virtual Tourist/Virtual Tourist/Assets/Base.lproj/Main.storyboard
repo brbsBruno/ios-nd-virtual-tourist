@@ -103,6 +103,7 @@
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="eGf-SI-Ffu" id="weX-4n-pXu"/>
+                        <outlet property="collectionViewFlowLayout" destination="f9W-54-FYT" id="oR9-xT-qkF"/>
                         <outlet property="mapView" destination="8Qm-9n-RGK" id="ctL-eR-rw3"/>
                         <outlet property="newCollectionButton" destination="mcA-gk-Jdj" id="M2U-5t-Yqy"/>
                     </connections>

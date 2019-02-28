@@ -9,8 +9,6 @@
 import UIKit
 import MapKit
 
-let PhotosAlbumCellReuseIdentifier = "PhotosAlbumCell"
-
 class PhotosAlbumViewController: UIViewController {
     
     // MARK: Properties
@@ -18,9 +16,13 @@ class PhotosAlbumViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
+    @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     
     var mapRegion: MKCoordinateRegion!
     var mapAnnotationView: MKAnnotationView!
+    
+    private let PhotosAlbumCellReuseIdentifier = "PhotosAlbumCell"
+    private let totalColors: Int = 100
     
     // MARK: UIViewController
     
@@ -30,29 +32,63 @@ class PhotosAlbumViewController: UIViewController {
         collectionView.dataSource = self
         
         setupAlbumMapRegion()
+        setupCollectionViewLayout()
     }
     
     // MARK: Setup
     
-    func setupAlbumMapRegion() {
+    private func setupAlbumMapRegion() {
         if let annotation = mapAnnotationView.annotation {
             let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             let region = MKCoordinateRegion(center: annotation.coordinate, span: span)
             mapView.setRegion(region, animated: false)
             
             let currentMapRect = mapView.visibleMapRect
+            
+            // TODO:
+            // let topPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
             let topPadding: CGFloat = 132;
             let padding = UIEdgeInsets(top: topPadding, left: 0, bottom: 0, right: 0)
             mapView.setVisibleMapRect(currentMapRect, edgePadding: padding, animated: true)
             mapView.addAnnotation(annotation)
         }
     }
+    
+    private func setupCollectionViewLayout() {
+        let itemsPerRow: CGFloat = 3
+        let itemsPadding: CGFloat = 5.0
+        
+        let paddingSpace = itemsPadding * (itemsPerRow + 1)
+        let availableWidth = view.frame.width - paddingSpace
+        let widthPerItem = availableWidth / itemsPerRow
+        
+        collectionViewFlowLayout.itemSize = CGSize(width: widthPerItem, height: widthPerItem)
+        collectionViewFlowLayout.minimumLineSpacing = itemsPadding
+        collectionViewFlowLayout.minimumInteritemSpacing = itemsPadding
+        
+        collectionView.contentInset = UIEdgeInsets(top: itemsPadding,
+                                                   left: itemsPadding,
+                                                   bottom: itemsPadding,
+                                                   right: itemsPadding)
+    }
+    
+    // MARK: Helper
+    
+    private func colorForIndexPath(indexPath: IndexPath) -> UIColor {
+        if indexPath.row >= totalColors {
+            return UIColor.black
+        }
+        
+        let hueValue: CGFloat = CGFloat(indexPath.row) / CGFloat(totalColors)
+        return UIColor(hue: hueValue, saturation: 1.0, brightness: 1.0, alpha: 1.0)
+    }
 }
 
 extension PhotosAlbumViewController: UICollectionViewDataSource {
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let numberOfItemsInSection: Int = 0
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
+        let numberOfItemsInSection: Int = totalColors
         
         if numberOfItemsInSection > 0 {
             collectionView.backgroundView = nil
@@ -68,8 +104,10 @@ extension PhotosAlbumViewController: UICollectionViewDataSource {
         return numberOfItemsInSection
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosAlbumCellReuseIdentifier, for: indexPath)
+        cell.backgroundColor = colorForIndexPath(indexPath: indexPath)
         return cell
     }
     
