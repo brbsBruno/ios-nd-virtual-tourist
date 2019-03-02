@@ -31,24 +31,28 @@ class PhotosAlbumViewController: UIViewController {
         
         collectionView.dataSource = self
         
-        setupAlbumMapRegion()
+        setupMapView()
         setupCollectionViewLayout()
     }
     
     // MARK: Setup
     
-    private func setupAlbumMapRegion() {
+    private func setupMapView() {
         if let annotation = mapAnnotationView.annotation {
             let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             let region = MKCoordinateRegion(center: annotation.coordinate, span: span)
+            
             mapView.setRegion(region, animated: false)
             
             let currentMapRect = mapView.visibleMapRect
             
-            // TODO:
-            // let topPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom
-            let topPadding: CGFloat = 132;
-            let padding = UIEdgeInsets(top: topPadding, left: 0, bottom: 0, right: 0)
+            var topPadding: CGFloat = 0
+            if let safeAreaTopInset = UIApplication.shared.keyWindow?.safeAreaInsets.top,
+                let navigationBarHeight = navigationController?.navigationBar.frame.height {
+                topPadding = safeAreaTopInset + navigationBarHeight
+            }
+            
+            let padding = UIEdgeInsets(top: topPadding, left: 0.0, bottom: 0.0, right: 0.0)
             mapView.setVisibleMapRect(currentMapRect, edgePadding: padding, animated: true)
             mapView.addAnnotation(annotation)
         }
