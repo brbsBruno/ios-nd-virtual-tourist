@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 let showPhotosAlbumSegue = "showPhotosAlbum"
 
@@ -16,6 +17,10 @@ class TravelsMapViewController: UIViewController {
     // MARK: Properties
     
     @IBOutlet weak var mapView: MKMapView!
+    
+    var dataController: DataController!
+    
+    var pins: [Pin]?
     
     // MARK: UIViewController
 
@@ -26,6 +31,7 @@ class TravelsMapViewController: UIViewController {
         
         setupLongPressAction()
         setupLastViewedMapRegion()
+        loadPins()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -58,9 +64,30 @@ class TravelsMapViewController: UIViewController {
             let point = sender.location(in: mapView)
             let coordinate = mapView.convert(point, toCoordinateFrom: mapView)
             
+            let pin = Pin(context: dataController.viewContext)
+            pin.latitude = coordinate.latitude
+            pin.longitude = coordinate.longitude
+            try? dataController.viewContext.save()
+            
             let annotation = MKPointAnnotation()
             annotation.coordinate = coordinate
             mapView.addAnnotation(annotation)
+        }
+    }
+    
+    func loadPins() {
+        let pinRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+        
+        if let result = try? dataController.viewContext.fetch(pinRequest) {
+            pins = result
+            
+            for pin in result {
+                let coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+                
+                let annotation = MKPointAnnotation()
+                annotation.coordinate = coordinate
+                mapView.addAnnotation(annotation)
+            }
         }
     }
     
