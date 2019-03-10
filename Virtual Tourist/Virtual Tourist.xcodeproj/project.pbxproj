@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7F11A63822358C8400FDB473 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F11A63722358C8400FDB473 /* DataController.swift */; };
+		7F11A63A2235C4B900FDB473 /* Pin+MKAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F11A6392235C4B900FDB473 /* Pin+MKAnnotation.swift */; };
 		7FB2B0C92224B3D700502C16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB2B0C82224B3D700502C16 /* AppDelegate.swift */; };
 		7FB2B0CB2224B3D700502C16 /* TravelsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB2B0CA2224B3D700502C16 /* TravelsMapViewController.swift */; };
 		7FB2B0CE2224B3D700502C16 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7FB2B0CC2224B3D700502C16 /* Main.storyboard */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		7F11A63722358C8400FDB473 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
+		7F11A6392235C4B900FDB473 /* Pin+MKAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pin+MKAnnotation.swift"; sourceTree = "<group>"; };
 		7FB2B0C52224B3D700502C16 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB2B0C82224B3D700502C16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7FB2B0CA2224B3D700502C16 /* TravelsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelsMapViewController.swift; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 			children = (
 				7FB2B0CF2224B3D700502C16 /* Virtual_Tourist.xcdatamodeld */,
 				7F11A63722358C8400FDB473 /* DataController.swift */,
+				7F11A6392235C4B900FDB473 /* Pin+MKAnnotation.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -192,6 +195,7 @@
 				7FB2B0E32224BF5400502C16 /* UserPreferences.swift in Sources */,
 				7FB2B0D12224B3D700502C16 /* Virtual_Tourist.xcdatamodeld in Sources */,
 				7FB2B0C92224B3D700502C16 /* AppDelegate.swift in Sources */,
+				7F11A63A2235C4B900FDB473 /* Pin+MKAnnotation.swift in Sources */,
 				7FB2B0E52224DCEF00502C16 /* PhotosAlbumViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

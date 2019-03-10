@@ -37,9 +37,8 @@ class TravelsMapViewController: UIViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == showPhotosAlbumSegue {
             if let controller = segue.destination as? PhotosAlbumViewController,
-                let annotation = sender as? MKAnnotationView {
-                controller.mapRegion = mapView.region
-                controller.mapAnnotationView = annotation
+                let annotation = sender as? Pin {
+                controller.pin = annotation
             }
         }
     }
@@ -69,9 +68,7 @@ class TravelsMapViewController: UIViewController {
             pin.longitude = coordinate.longitude
             try? dataController.viewContext.save()
             
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = coordinate
-            mapView.addAnnotation(annotation)
+            mapView.addAnnotation(pin)
         }
     }
     
@@ -80,14 +77,7 @@ class TravelsMapViewController: UIViewController {
         
         if let result = try? dataController.viewContext.fetch(pinRequest) {
             pins = result
-            
-            for pin in result {
-                let coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
-                
-                let annotation = MKPointAnnotation()
-                annotation.coordinate = coordinate
-                mapView.addAnnotation(annotation)
-            }
+            mapView.addAnnotations(result)
         }
     }
     
@@ -105,7 +95,9 @@ extension TravelsMapViewController: MKMapViewDelegate {
     }
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        performSegue(withIdentifier: showPhotosAlbumSegue, sender: view)
+        if let pin = view.annotation as? Pin {
+            performSegue(withIdentifier: showPhotosAlbumSegue, sender: pin)
+        }
     }
 }
 
