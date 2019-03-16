@@ -19,6 +19,7 @@ class PhotosAlbumViewController: UIViewController {
     @IBOutlet weak var collectionViewFlowLayout: UICollectionViewFlowLayout!
     
     var pin: Pin!
+    var photos: FlickrPhotos?
     
     private let PhotosAlbumCellReuseIdentifier = "PhotosAlbumCell"
     
@@ -28,9 +29,10 @@ class PhotosAlbumViewController: UIViewController {
         super.viewDidLoad()
         
         collectionView.dataSource = self
+        collectionView.delegate = self
         
         setupMapView()
-        setupCollectionViewLayout()
+        setupCollectionView()
     }
     
     // MARK: Setup
@@ -54,6 +56,14 @@ class PhotosAlbumViewController: UIViewController {
         mapView.addAnnotation(pin)
     }
     
+    private func setupCollectionView() {
+        setupCollectionViewLayout()
+        
+        if (photos == nil || ((photos?.photo) != nil && photos!.photo!.count == 0)) {
+            loadPhotos()
+        }
+    }
+    
     private func setupCollectionViewLayout() {
         let itemsPerRow: CGFloat = 3
         let itemsPadding: CGFloat = 5.0
@@ -71,32 +81,86 @@ class PhotosAlbumViewController: UIViewController {
                                                    bottom: itemsPadding,
                                                    right: itemsPadding)
     }
+    
+    // MARK: Actions
+    
+    private func loadPhotos() {
+        // let emptylat = -30.147063
+        // let emptylon = -33.850175
+        //guard let bbox = FlickrClient.BoundingBox(latitude: emptylat, longitude: emptylon) else {
+        guard let bbox = FlickrClient.BoundingBox(latitude: pin.latitude, longitude: pin.longitude) else {
+            return
+        }
+        
+        let loadTask = FlickrClient.shared.searchPhotos(bbox: bbox) { (data, error) in
+            DispatchQueue.main.async {
+                if let data = data {
+                    self.photos = data
+                }
+                self.collectionView.reloadData()
+            }
+        }
+        
+        loadTask?.resume()
+    }
 }
 
 extension PhotosAlbumViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
-        let numberOfItemsInSection: Int = pin.photos?.count ?? 0
+        let numberOfItemsInSection: Int = photos?.photo?.count ?? 0
         
         if numberOfItemsInSection > 0 {
             collectionView.backgroundView = nil
         
         } else {
-            let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
-            let noDataLabel: UILabel  = UILabel(frame: frame)
-            noDataLabel.text = NSLocalizedString("There are no images for this location", comment: "")
-            noDataLabel.textAlignment = .center
-            collectionView.backgroundView  = noDataLabel
+            setCollectionViewLoading()
         }
         
         return numberOfItemsInSection
     }
     
-    func collectionView(_ collectionView: UICollectionView,
-                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotosAlbumCellReuseIdentifier, for: indexPath)
+        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        activityIndicator.center = collectionView.center
+        cell.backgroundView = activityIndicator
+        activityIndicator.startAnimating()
+        
         return cell
     }
     
+    private func setCollectionViewEmpty() {
+        let frame = CGRect(x: 0, y: 0, width: collectionView.bounds.size.width, height: collectionView.bounds.size.height)
+        let noDataLabel: UILabel  = UILabel(frame: frame)
+        noDataLabel.text = NSLocalizedString("There are no images for this location", comment: "")
+        noDataLabel.textAlignment = .center
+        collectionView.backgroundView  = noDataLabel
+    }
+    
+    private func setCollectionViewLoading() {
+        let activityIndicator = UIActivityIndicatorView(style: .gray)
+        activityIndicator.center = collectionView.center
+        collectionView.backgroundView  = activityIndicator
+        activityIndicator.startAnimating()
+    }
+}
+
+extension PhotosAlbumViewController: UICollectionViewDelegate {
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if let urlString = photos?.photo?[indexPath.row].url {
+            let imageURL = URL(string: urlString)!
+            
+            URLSession.shared.dataTask(with: imageURL) { (data, _, _) in
+                if let data = data {
+                    let image = UIImage(data: data)
+                    DispatchQueue.main.async {
+                        cell.backgroundView = UIImageView(image: image)
+                    }
+                }
+                }.resume()
+        }
+    }
 }
