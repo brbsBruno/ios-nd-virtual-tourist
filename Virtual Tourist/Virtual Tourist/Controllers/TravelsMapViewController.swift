@@ -39,6 +39,7 @@ class TravelsMapViewController: UIViewController {
             if let controller = segue.destination as? PhotosAlbumViewController,
                 let annotation = sender as? Pin {
                 controller.pin = annotation
+                controller.dataController = dataController
             }
         }
     }
