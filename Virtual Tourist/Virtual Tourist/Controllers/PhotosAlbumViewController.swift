@@ -28,6 +28,18 @@ class PhotosAlbumViewController: UIViewController {
     var dataController: DataController!
     
     var pin: Pin!
+    private var selectedPhotosIndex = [IndexPath]() {
+        didSet {
+            if self.selectedPhotosIndex.count > 0 {
+                newCollectionButton.title = NSLocalizedString("Remove (\(self.selectedPhotosIndex.count))", comment: "")
+                newCollectionButton.tintColor = UIColor.red
+                
+            } else {
+                newCollectionButton.title = NSLocalizedString("New Collection", comment: "")
+                newCollectionButton.tintColor = self.view.tintColor
+            }
+        }
+    }
     
     var state = CollectionViewState.loading {
         didSet {
@@ -112,6 +124,7 @@ class PhotosAlbumViewController: UIViewController {
     private func setupCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.allowsMultipleSelection = true
         
         setupCollectionViewLayout()
         
@@ -170,12 +183,31 @@ class PhotosAlbumViewController: UIViewController {
     }
     
     @IBAction func newCollection(_ sender: Any) {
-        pin.page += 1
-        loadPhotos()
+        if self.selectedPhotosIndex.count > 0 {
+            removeSelectedPhotos()
+            collectionView.deleteItems(at: selectedPhotosIndex)
+            selectedPhotosIndex = [IndexPath]()
+            
+        } else {
+            pin.page += 1
+            loadPhotos()
+        }
     }
     
     private func storeImageData(_ imageData: Data, photo: Photo) {
         photo.image = imageData
+        try? dataController.viewContext.save()
+    }
+    
+    private func removeSelectedPhotos() {
+        var selectedPhotos = [Photo]()
+        for index in selectedPhotosIndex {
+            if let photo = pin.photos?.allObjects[index.row] as? Photo {
+                selectedPhotos.append(photo)
+            }
+        }
+        
+        pin.removeFromPhotos(NSSet(array: selectedPhotos))
         try? dataController.viewContext.save()
     }
     
@@ -228,4 +260,24 @@ extension PhotosAlbumViewController: UICollectionViewDelegate {
             }
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            cell.alpha = 0.5
+        }
+        
+        selectedPhotosIndex.append(indexPath)
+        
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) {
+            cell.alpha = 1
+        }
+        
+        if let index = selectedPhotosIndex.firstIndex(of: indexPath) {
+            selectedPhotosIndex.remove(at: index)
+        }
+    }
+    
 }
