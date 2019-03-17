@@ -31,6 +31,8 @@ class PhotosAlbumViewController: UIViewController {
     
     var state = CollectionViewState.loading {
         didSet {
+            pin.photos = NSSet()
+            
             switch state {
             case .loading:
                 newCollectionButton.isEnabled = false
@@ -50,8 +52,6 @@ class PhotosAlbumViewController: UIViewController {
                     pin.addToPhotos(photo)
                 }
                 
-                self.collectionView.reloadData()
-                
             case .empty:
                 newCollectionButton.isEnabled = true
                 
@@ -70,6 +70,8 @@ class PhotosAlbumViewController: UIViewController {
                 errorLabel.textAlignment = .center
                 collectionView.backgroundView  = errorLabel
             }
+            
+            self.collectionView.reloadData()
         }
     }
     
@@ -103,6 +105,8 @@ class PhotosAlbumViewController: UIViewController {
         let padding = UIEdgeInsets(top: topPadding, left: 0.0, bottom: 0.0, right: 0.0)
         mapView.setVisibleMapRect(currentMapRect, edgePadding: padding, animated: true)
         mapView.addAnnotation(pin)
+        
+        mapView.isUserInteractionEnabled = false
     }
     
     private func setupCollectionView() {
@@ -142,8 +146,9 @@ class PhotosAlbumViewController: UIViewController {
         }
         
         state = .loading
+        let pinPage = Int(pin.page)
         
-        let loadTask = FlickrClient.shared.searchPhotos(bbox: bbox) { (data, error) in
+        let loadTask = FlickrClient.shared.searchPhotos(bbox: bbox, page: pinPage) { (data, error) in
             DispatchQueue.main.async {
                 guard error == nil else {
                     self.state = .error(error!)
@@ -162,6 +167,11 @@ class PhotosAlbumViewController: UIViewController {
         }
         
         loadTask?.resume()
+    }
+    
+    @IBAction func newCollection(_ sender: Any) {
+        pin.page += 1
+        loadPhotos()
     }
     
     private func storeImageData(_ imageData: Data, photo: Photo) {
@@ -188,6 +198,7 @@ extension PhotosAlbumViewController: UICollectionViewDataSource {
         
         return cell
     }
+    
 }
 
 extension PhotosAlbumViewController: UICollectionViewDelegate {

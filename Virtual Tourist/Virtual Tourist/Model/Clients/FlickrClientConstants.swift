@@ -33,6 +33,7 @@ extension FlickrClient {
             static let Text = "text"
             static let BoundingBox = "bbox"
             static let Page = "page"
+            static let PerPage = "per_page"
         }
         
         // MARK: Flickr Parameter Values
@@ -41,6 +42,7 @@ extension FlickrClient {
             static let DisableJSONCallback = "1"
             static let MediumURL = "url_m"
             static let UseSafeSearch = "1"
+            static let PerPage = "21"
         }
         
         // MARK: Methods

@@ -32,6 +32,7 @@
 		7F3DB64F222C16A0001C86BF /* FlickrClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 		7F3DB651222C5063001C86BF /* FlickrClientConvenience.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClientConvenience.swift; sourceTree = "<group>"; };
 		7F3DB653222C51BB001C86BF /* FlickrClientConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrClientConstants.swift; sourceTree = "<group>"; };
+		7F9592F1223DC51E009EB9D2 /* Virtual_Tourist 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Virtual_Tourist 2.xcdatamodel"; sourceTree = "<group>"; };
 		7FB2B0C52224B3D700502C16 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB2B0C82224B3D700502C16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7FB2B0CA2224B3D700502C16 /* TravelsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelsMapViewController.swift; sourceTree = "<group>"; };
@@ -427,9 +428,10 @@
 		7FB2B0CF2224B3D700502C16 /* Virtual_Tourist.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				7F9592F1223DC51E009EB9D2 /* Virtual_Tourist 2.xcdatamodel */,
 				7FB2B0D02224B3D700502C16 /* Virtual_Tourist.xcdatamodel */,
 			);
-			currentVersion = 7FB2B0D02224B3D700502C16 /* Virtual_Tourist.xcdatamodel */;
+			currentVersion = 7F9592F1223DC51E009EB9D2 /* Virtual_Tourist 2.xcdatamodel */;
 			path = Virtual_Tourist.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -50,7 +50,7 @@ extension FlickrClient {
         
     }
     
-    func searchPhotos(bbox: BoundingBox, completion: @escaping (_ result: FlickrPhotos?, _ error: NSError?) -> Void) -> URLSessionDataTask? {
+    func searchPhotos(bbox: BoundingBox, page: Int = 1, completion: @escaping (_ result: FlickrPhotos?, _ error: NSError?) -> Void) -> URLSessionDataTask? {
         
         let parameters: [String: Any] = [Constants.FlickrParameterKeys.APIKey : Constants.APIKey,
                                          Constants.FlickrParameterKeys.Method : Constants.Methods.search,
@@ -58,6 +58,8 @@ extension FlickrClient {
                                          Constants.FlickrParameterKeys.Extras : Constants.FlickrParameterValues.MediumURL,
                                          Constants.FlickrParameterKeys.Format : Constants.FlickrParameterValues.ResponseFormat,
                                          Constants.FlickrParameterKeys.NoJSONCallback : Constants.FlickrParameterValues.DisableJSONCallback,
+                                         Constants.FlickrParameterKeys.PerPage : Constants.FlickrParameterValues.PerPage,
+                                         Constants.FlickrParameterKeys.Page : page,
                                          Constants.FlickrParameterKeys.BoundingBox : bbox.stringValue()]
         
         var components = URLComponents()
